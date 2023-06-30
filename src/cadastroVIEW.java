@@ -158,6 +158,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         if(status == false){
             JOptionPane.showMessageDialog(null, "Erro de conexão!");
         }else{
+            produtos.setStatus("Não vendido");
             resposta = dao.cadastrarProduto(produtos);
             if(resposta == 1){
                 JOptionPane.showMessageDialog(null, "Dados cadastrados com sucesso.");

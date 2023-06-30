@@ -15,6 +15,9 @@ import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ProdutosDAO {
@@ -51,13 +54,46 @@ public class ProdutosDAO {
             return ex.getErrorCode();
         }
     }
+   
     
     
-    public ArrayList<ProdutosDTO> listarProdutos(){
+    public List<ProdutosDTO> listar (){
+        Connection conn;
+        PreparedStatement stat;
+        ResultSet rs;
         
-        return listagem;
+        List<ProdutosDTO> produto = new ArrayList();
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/leiloes?autoReconnect=true&useSSL=false", "root", "gojira2023");
+            stat = conn.prepareStatement("SELECT * FROM produtos");
+            rs = stat.executeQuery();
+            
+            while (rs.next()){
+                ProdutosDTO produtos = new ProdutosDTO();
+                
+                produtos.setId(rs.getInt("id"));
+                produtos.setNome(rs.getString("nome"));
+                produtos.setValor(rs.getInt("valor"));
+                produtos.setStatus(rs.getString("status"));
+                produtos.setStatus("Não vendido");
+                produto.add(produtos);
+                
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return produto;
+        
     }
     
+   
+    
+    
+    
+   
     
     
         
