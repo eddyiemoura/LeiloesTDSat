@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Adm
@@ -17,14 +16,12 @@ public class listagemVIEW extends javax.swing.JFrame {
     /**
      * Creates new form listagemVIEW
      */
-    
-    private ProdutosDTO produtos;
-    
+
     public listagemVIEW() {
         initComponents();
         read();
     }
-    
+
     public void read() {
         DefaultTableModel modelo = (DefaultTableModel) listaProdutos.getModel();
         modelo.setNumRows(0);
@@ -41,8 +38,6 @@ public class listagemVIEW extends javax.swing.JFrame {
 
         }
     }
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -77,6 +72,11 @@ public class listagemVIEW extends javax.swing.JFrame {
                 "ID", "Nome", "Valor", "Status"
             }
         ));
+        listaProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaProdutosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(listaProdutos);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
@@ -159,7 +159,28 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-          
+        if(listaProdutos.getSelectedRow() != 1){
+            ProdutosDTO produtos = new ProdutosDTO();
+            ProdutosDAO dao = new ProdutosDAO();
+            boolean status;
+            int resposta;
+            
+            produtos.setId((int) listaProdutos.getValueAt(listaProdutos.getSelectedRow(), 0));
+            
+            status = dao.conectar();
+            
+            if(status = false){
+                JOptionPane.showMessageDialog(null, "Erro de conexão");
+            }else{
+                resposta = dao.venderProduto(produtos);
+                if(resposta == 1){
+                    JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso");
+                    
+                }
+            }
+            read();
+        }
+
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -170,6 +191,10 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void listaProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaProdutosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listaProdutosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -219,5 +244,4 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
 
-  
 }

@@ -46,7 +46,7 @@ public class ProdutosDAO {
             st.setInt(1, produto.getId());
             st.setString(2, produto.getNome());
             st.setInt(3, produto.getValor());
-            st.setString(4, produto.getStatus());
+            st.setString(4, "não vendido");
             status = st.executeUpdate();
             return status;
         } catch (SQLException ex) {
@@ -56,6 +56,20 @@ public class ProdutosDAO {
     }
    
     
+   public int venderProduto (ProdutosDTO produto){
+       int status;
+               try{
+                  st = conn.prepareStatement("UPDATE produtos SET status = ? WHERE id = ?");
+                  st.setString(1, "vendido");
+                  st.setInt(2, produto.getId());
+                  status = st.executeUpdate();
+                  return status;
+               }catch (SQLException ex){
+                   System.out.println("Erro ao conectar: " + ex.getMessage());
+                   return ex.getErrorCode();
+               }
+   }
+   
     
     public List<ProdutosDTO> listar (){
         Connection conn;
@@ -76,7 +90,6 @@ public class ProdutosDAO {
                 produtos.setNome(rs.getString("nome"));
                 produtos.setValor(rs.getInt("valor"));
                 produtos.setStatus(rs.getString("status"));
-                produtos.setStatus("Não vendido");
                 produto.add(produtos);
                 
                 
@@ -88,6 +101,11 @@ public class ProdutosDAO {
         return produto;
         
     }
+    
+   
+    
+    
+    
     
    
     
