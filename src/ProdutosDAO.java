@@ -102,6 +102,38 @@ public class ProdutosDAO {
         
     }
     
+    public List<ProdutosDTO> listarProdutosVendidos (){
+        Connection conn;
+        PreparedStatement stat;
+        ResultSet rs;
+        
+        List<ProdutosDTO> produto = new ArrayList();
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/leiloes?autoReconnect=true&useSSL=false", "root", "gojira2023");
+            stat = conn.prepareStatement("SELECT * FROM produtos WHERE status = ?");
+            stat.setString(1, "vendido");
+            rs = stat.executeQuery();
+            
+            while (rs.next()){
+                ProdutosDTO produtos = new ProdutosDTO();
+                
+                produtos.setId(rs.getInt("id"));
+                produtos.setNome(rs.getString("nome"));
+                produtos.setValor(rs.getInt("valor"));
+                produtos.setStatus(rs.getString("status"));
+                produto.add(produtos);
+                
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return produto;
+        
+    }
+    
    
     
     
